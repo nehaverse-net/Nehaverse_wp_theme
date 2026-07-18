@@ -59,3 +59,17 @@ define('NEHAVERSE_DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/...');
 ```
 
 未設定の場合、フォーム送信はエラー表示になります。
+
+## サービス稼働状況
+
+トップページ最下部の参加CTAとサイトフッターの間に、WebサイトとMinecraftサーバーの稼働状況が表示されます。
+
+「外観 > カスタマイズ > Service Status」の `Status API URL` に、Cloudflare Workerの `/api/status` エンドポイントを設定してください。
+
+例:
+
+```text
+https://nehaverse-status.example.workers.dev/api/status
+```
+
+表示は60秒ごとに自動更新されます。API URLが未設定の場合は、設定が必要であることを示すメッセージが表示されます。
