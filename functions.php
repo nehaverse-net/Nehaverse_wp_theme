@@ -47,8 +47,28 @@ function nehaverse_assets(): void
         [],
         '6.5.1'
     );
-    wp_enqueue_style('nehaverse-style', get_stylesheet_uri(), ['nehaverse-fonts', 'font-awesome'], '1.0.2');
+    wp_enqueue_style('nehaverse-style', get_stylesheet_uri(), ['nehaverse-fonts', 'font-awesome'], '1.0.3');
     wp_enqueue_script('nehaverse-main', get_template_directory_uri() . '/assets/js/main.js', [], '1.0.2', true);
+
+    if (is_front_page()) {
+        wp_enqueue_style(
+            'nehaverse-status',
+            get_template_directory_uri() . '/assets/css/status.css',
+            ['nehaverse-style', 'font-awesome'],
+            '1.0.0'
+        );
+        wp_enqueue_script(
+            'nehaverse-status',
+            get_template_directory_uri() . '/assets/js/status.js',
+            [],
+            '1.0.0',
+            true
+        );
+        wp_localize_script('nehaverse-status', 'NehaverseStatusConfig', [
+            'apiUrl'          => esc_url_raw(get_theme_mod('nehaverse_status_api_url', '')),
+            'refreshInterval' => 60000,
+        ]);
+    }
 }
 add_action('wp_enqueue_scripts', 'nehaverse_assets');
 
@@ -224,6 +244,23 @@ function nehaverse_customize_register(WP_Customize_Manager $wp_customize): void
         'label'   => __('Open header button in a new tab', 'nehaverse'),
         'section' => 'nehaverse_header',
         'type'    => 'checkbox',
+    ]);
+
+    $wp_customize->add_section('nehaverse_status', [
+        'title'       => __('Service Status', 'nehaverse'),
+        'description' => __('Cloudflare WorkerのステータスAPIを設定します。', 'nehaverse'),
+        'priority'    => 85,
+    ]);
+
+    $wp_customize->add_setting('nehaverse_status_api_url', [
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ]);
+    $wp_customize->add_control('nehaverse_status_api_url', [
+        'label'       => __('Status API URL', 'nehaverse'),
+        'description' => __('例: https://status.example.workers.dev/api/status', 'nehaverse'),
+        'section'     => 'nehaverse_status',
+        'type'        => 'url',
     ]);
 }
 add_action('customize_register', 'nehaverse_customize_register');

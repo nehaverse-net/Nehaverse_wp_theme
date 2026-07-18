@@ -1,0 +1,94 @@
+.nhv-status {
+  width: var(--max-width, min(1120px, 92vw));
+  margin: 90px auto 0;
+  color: var(--text-primary, #1e1f31);
+  font-family: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+}
+
+.nhv-status *, .nhv-status *::before, .nhv-status *::after { box-sizing: border-box; }
+.nhv-status__shell {
+  position: relative;
+  overflow: hidden;
+  padding: 56px 60px 40px;
+  border: 1px solid rgba(127,132,255,.12);
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(94,200,240,.2), transparent 24%),
+    radial-gradient(circle at 8% 92%, rgba(255,158,214,.16), transparent 22%),
+    rgba(255,255,255,.95);
+  box-shadow: var(--shadow-card, 0 16px 30px rgba(66,87,135,.16));
+}
+.nhv-status__header { max-width: 640px; margin: 0 auto 34px; text-align: center; }
+.nhv-status__badge {
+  display: inline-flex;
+  padding: 6px 20px;
+  border-radius: 999px;
+  background: rgba(127,132,255,.16);
+  color: var(--accent-indigo, #7f84ff);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.nhv-status__header h2 { margin: 20px 0 10px; font-size: clamp(2rem,3.4vw,2.6rem); }
+.nhv-status__header p { margin: 0; color: var(--text-secondary,#5c5f7a); }
+.nhv-status__summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  min-height: 112px;
+  margin-bottom: 22px;
+  padding: 22px 26px;
+  border: 1px solid rgba(127,132,255,.14);
+  border-radius: 22px;
+  background: rgba(255,255,255,.8);
+  box-shadow: 0 12px 28px rgba(75,80,130,.07);
+}
+.nhv-status__summary-dot { width: 16px; height: 16px; border-radius: 50%; background: #a4aac0; box-shadow: 0 0 0 8px rgba(164,170,192,.12); }
+.nhv-status__summary-dot.is-online { background: #42b982; box-shadow: 0 0 0 8px rgba(66,185,130,.12); }
+.nhv-status__summary-dot.is-degraded { background: #d9952f; box-shadow: 0 0 0 8px rgba(217,149,47,.12); }
+.nhv-status__summary-dot.is-down { background: #e45d70; box-shadow: 0 0 0 8px rgba(228,93,112,.12); }
+.nhv-status__summary-label { display: block; margin-bottom: 5px; color: var(--accent-indigo,#7f84ff); font-size: .68rem; font-weight: 700; letter-spacing: .12em; }
+.nhv-status__summary strong { display: block; font-size: 1.1rem; }
+.nhv-status__summary p { margin: 4px 0 0; color: var(--text-secondary,#5c5f7a); font-size: .82rem; }
+.nhv-status__summary-time { text-align: right; }
+.nhv-status__summary-time span { display: block; margin-bottom: 4px; color: #969bb2; font-size: .68rem; }
+.nhv-status__summary-time time { font-size: .8rem; font-weight: 600; }
+.nhv-status__grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 22px; }
+.nhv-status__card { overflow: hidden; padding: 26px 28px 0; border: 1px solid rgba(127,132,255,.14); border-radius: 24px; background: rgba(255,255,255,.88); transition: transform .25s ease, box-shadow .25s ease; }
+.nhv-status__card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(83,91,150,.1); }
+.nhv-status__card-top { display: flex; align-items: center; justify-content: space-between; }
+.nhv-status__type { color: #969bb2; font-family: 'Poppins',sans-serif; font-size: .68rem; font-weight: 600; letter-spacing: .1em; }
+.nhv-status__pill { display: inline-flex; align-items: center; gap: 7px; min-height: 29px; padding: 0 11px; border-radius: 999px; background: #f1f2f7; color: #8b91aa; font-size: .7rem; }
+.nhv-status__pill i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.nhv-status__pill b { font-weight: 600; }
+.nhv-status__pill.is-online { color: #319b6c; background: #e9f8f1; }
+.nhv-status__pill.is-offline { color: #d94d63; background: #ffedf0; }
+.nhv-status__card h3 { margin: 22px 0 8px; font-size: 1.35rem; }
+.nhv-status__card > a, .nhv-status__card > button { border: 0; padding: 0; background: transparent; color: var(--text-secondary,#5c5f7a); font: inherit; font-size: .82rem; text-decoration: none; cursor: pointer; }
+.nhv-status__card > a:hover, .nhv-status__card > button:hover { color: var(--accent-indigo,#7f84ff); }
+.nhv-status__card dl { display: grid; grid-template-columns: 1fr 1fr; margin: 24px -28px 0; border-top: 1px solid rgba(127,132,255,.12); }
+.nhv-status__card dl > div { padding: 16px 28px; }
+.nhv-status__card dl > div + div { border-left: 1px solid rgba(127,132,255,.12); }
+.nhv-status__card dt { margin-bottom: 5px; color: #969bb2; font-size: .72rem; }
+.nhv-status__card dd { margin: 0; font-size: .86rem; font-weight: 600; }
+.nhv-status__version { margin: 0 -28px; padding: 11px 28px; border-top: 1px solid rgba(127,132,255,.12); color: #858aa4; font-size: .7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nhv-status__footer { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; padding: 0 3px; }
+.nhv-status__footer p { margin: 0; color: var(--text-secondary,#5c5f7a); font-size: .76rem; }
+.nhv-status__footer button { border: 0; background: transparent; color: var(--accent-indigo,#7f84ff); font-size: .78rem; font-weight: 600; cursor: pointer; }
+.nhv-status__footer button:hover span { display: inline-block; transform: translateX(3px); }
+.nhv-status__toast { position: fixed; z-index: 9999; left: 50%; bottom: 24px; padding: 11px 18px; border-radius: 999px; background: #25283e; color: #fff; font-size: .75rem; opacity: 0; transform: translate(-50%,15px); pointer-events: none; transition: .25s ease; }
+.nhv-status__toast.is-visible { opacity: 1; transform: translate(-50%,0); }
+@media (max-width: 760px) {
+  .nhv-status { width: calc(100% - 28px); margin-top: 62px; }
+  .nhv-status__shell { padding: 38px 22px 28px; border-radius: 28px; }
+  .nhv-status__summary { grid-template-columns: auto 1fr; }
+  .nhv-status__summary-time { grid-column: 2; text-align: left; display: flex; gap: 9px; align-items: baseline; }
+  .nhv-status__grid { grid-template-columns: 1fr; }
+  .nhv-status__footer { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .nhv-status__footer button { padding: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nhv-status *, .nhv-status *::before, .nhv-status *::after { transition-duration: .01ms !important; }
+}
