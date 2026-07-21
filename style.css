@@ -392,9 +392,9 @@ main {
   position: absolute;
   inset: 0;
   background:
-    url('https://page.gensparksite.com/v1/base64_upload/d92a67293df16f732725cbca3f0270c7') center/cover no-repeat;
-  opacity: 0.18;
-  filter: saturate(130%);
+    radial-gradient(circle at 18% 22%, rgba(126, 220, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 82% 28%, rgba(127, 132, 255, 0.14), transparent 36%),
+    radial-gradient(circle at 74% 82%, rgba(255, 173, 224, 0.12), transparent 32%);
   z-index: -1;
 }
 
