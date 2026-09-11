@@ -44,7 +44,7 @@ if (!defined('ABSPATH')) {
                 </div>
             </div>
         </div>
-        <p class="site-footer__copy">&copy; <?php echo esc_html(gmdate('Y')); ?> Nehaverse</p>
+        <p class="site-footer__copy">&copy; <?php echo esc_html(wp_date('Y')); ?> Nehaverse</p>
     </footer>
 </div>
 <?php wp_footer(); ?>

@@ -47,8 +47,21 @@ function nehaverse_assets(): void
         [],
         '6.5.1'
     );
-    wp_enqueue_style('nehaverse-style', get_stylesheet_uri(), ['nehaverse-fonts', 'font-awesome'], '1.0.3');
+    wp_enqueue_style('nehaverse-style', get_stylesheet_uri(), ['nehaverse-fonts', 'font-awesome'], '1.0.4');
     wp_enqueue_script('nehaverse-main', get_template_directory_uri() . '/assets/js/main.js', [], '1.0.2', true);
+
+    if (is_page_template('page-contact.php') || is_page('contact')) {
+        wp_enqueue_script(
+            'cloudflare-turnstile',
+            'https://challenges.cloudflare.com/turnstile/v0/api.js',
+            [],
+            null,
+            [
+                'strategy'  => 'defer',
+                'in_footer' => true,
+            ]
+        );
+    }
 
     if (is_front_page()) {
         wp_enqueue_style(
@@ -61,7 +74,7 @@ function nehaverse_assets(): void
             'nehaverse-status',
             get_template_directory_uri() . '/assets/js/status.js',
             [],
-            '1.0.0',
+            '1.0.1',
             true
         );
         wp_localize_script('nehaverse-status', 'NehaverseStatusConfig', [
@@ -71,25 +84,6 @@ function nehaverse_assets(): void
     }
 }
 add_action('wp_enqueue_scripts', 'nehaverse_assets');
-
-function nehaverse_register_news_type(): void
-{
-    register_post_type('nehaverse_news', [
-        'labels' => [
-            'name'          => __('お知らせ', 'nehaverse'),
-            'singular_name' => __('お知らせ', 'nehaverse'),
-            'add_new_item'  => __('新しいお知らせを追加', 'nehaverse'),
-            'edit_item'     => __('お知らせを編集', 'nehaverse'),
-        ],
-        'public'       => true,
-        'menu_icon'    => 'dashicons-megaphone',
-        'has_archive'  => true,
-        'rewrite'      => ['slug' => 'news'],
-        'supports'     => ['title', 'editor', 'excerpt', 'thumbnail'],
-        'show_in_rest' => true,
-    ]);
-}
-add_action('init', 'nehaverse_register_news_type');
 
 function nehaverse_asset(string $path): string
 {
@@ -367,14 +361,25 @@ function nehaverse_render_news_section(): void
 
 function nehaverse_handle_contact(): void
 {
+    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+        status_header(405);
+        exit;
+    }
+
     if (!isset($_POST['nehaverse_contact_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nehaverse_contact_nonce'])), 'nehaverse_contact')) {
         wp_safe_redirect(add_query_arg('error', '1', wp_get_referer() ?: home_url('/contact/')));
         exit;
     }
 
-    $name = sanitize_text_field(wp_unslash($_POST['name'] ?? ''));
-    $contact = sanitize_text_field(wp_unslash($_POST['contact'] ?? ''));
-    $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
+    $turnstile_token = sanitize_text_field(wp_unslash($_POST['cf-turnstile-response'] ?? ''));
+    if (!nehaverse_verify_turnstile($turnstile_token)) {
+        wp_safe_redirect(add_query_arg('error', 'turnstile', home_url('/contact/')));
+        exit;
+    }
+
+    $name = nehaverse_text_substr(sanitize_text_field(wp_unslash($_POST['name'] ?? '')), 0, 100);
+    $contact = nehaverse_text_substr(sanitize_text_field(wp_unslash($_POST['contact'] ?? '')), 0, 200);
+    $message = nehaverse_text_substr(sanitize_textarea_field(wp_unslash($_POST['message'] ?? '')), 0, 1000);
 
     if ($name === '' || $contact === '' || $message === '') {
         wp_safe_redirect(add_query_arg('error', '1', wp_get_referer() ?: home_url('/contact/')));
@@ -397,7 +402,7 @@ function nehaverse_handle_contact(): void
                 'fields'    => [
                     ['name' => 'お名前', 'value' => $name, 'inline' => false],
                     ['name' => '連絡先', 'value' => $contact, 'inline' => false],
-                    ['name' => 'メッセージ', 'value' => mb_substr($message, 0, 1000), 'inline' => false],
+                    ['name' => 'メッセージ', 'value' => $message, 'inline' => false],
                 ],
                 'footer'    => ['text' => 'Nehaverse Contact Form'],
                 'timestamp' => gmdate('c'),
@@ -411,6 +416,73 @@ function nehaverse_handle_contact(): void
 }
 add_action('admin_post_nehaverse_contact', 'nehaverse_handle_contact');
 add_action('admin_post_nopriv_nehaverse_contact', 'nehaverse_handle_contact');
+
+function nehaverse_text_substr(string $text, int $start, int $length): string
+{
+    if (function_exists('mb_substr')) {
+        return mb_substr($text, $start, $length, 'UTF-8');
+    }
+
+    $characters = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
+    if (is_array($characters)) {
+        return implode('', array_slice($characters, $start, $length));
+    }
+
+    return substr($text, $start, $length);
+}
+
+function nehaverse_turnstile_site_key(): string
+{
+    $site_key = getenv('TURNSTILE_SITEKEY');
+    return is_string($site_key) ? trim($site_key) : '';
+}
+
+function nehaverse_verify_turnstile(string $token): bool
+{
+    $secret = getenv('TURNSTILE_SECRET');
+    if ($token === '' || !is_string($secret) || trim($secret) === '') {
+        return false;
+    }
+
+    $remote_ip = '';
+    foreach (['HTTP_CF_CONNECTING_IP', 'REMOTE_ADDR'] as $server_key) {
+        $candidate = sanitize_text_field(wp_unslash($_SERVER[$server_key] ?? ''));
+        if (filter_var($candidate, FILTER_VALIDATE_IP)) {
+            $remote_ip = $candidate;
+            break;
+        }
+    }
+
+    $body = [
+        'secret'   => trim($secret),
+        'response' => $token,
+    ];
+    if ($remote_ip !== '') {
+        $body['remoteip'] = $remote_ip;
+    }
+
+    $response = wp_remote_post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+        'timeout' => 10,
+        'body'    => $body,
+    ]);
+    if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+        return false;
+    }
+
+    $result = json_decode(wp_remote_retrieve_body($response), true);
+    if (!is_array($result) || ($result['success'] ?? false) !== true) {
+        return false;
+    }
+
+    $allowed_hosts = array_filter([
+        wp_parse_url(home_url('/'), PHP_URL_HOST),
+        'localhost',
+        '127.0.0.1',
+    ]);
+
+    return in_array($result['hostname'] ?? '', $allowed_hosts, true)
+        && hash_equals('turnstile-spin-v2', (string) ($result['action'] ?? ''));
+}
 
 /**
  * Branded OGP cards. Every page receives a share image carrying its title.
@@ -438,14 +510,16 @@ add_action('after_switch_theme', 'nehaverse_ogp_flush_rules');
 
 function nehaverse_ogp_context(int $post_id): array
 {
-    if ($post_id > 0 && get_post_status($post_id)) {
+    if ($post_id > 0) {
         $post = get_post($post_id);
-        return [
-            'title'       => wp_strip_all_tags(get_the_title($post_id)),
-            'description' => wp_trim_words(wp_strip_all_tags($post?->post_excerpt ?: $post?->post_content ?: ''), 28, '…'),
-            'url'         => get_permalink($post_id),
-            'updated'     => (string) get_post_modified_time('U', true, $post_id),
-        ];
+        if ($post instanceof WP_Post) {
+            return [
+                'title'       => wp_strip_all_tags(get_the_title($post_id)),
+                'description' => wp_trim_words(wp_strip_all_tags($post->post_excerpt ?: $post->post_content), 28, '…'),
+                'url'         => get_permalink($post_id),
+                'updated'     => (string) get_post_modified_time('U', true, $post_id),
+            ];
+        }
     }
 
     return [
@@ -459,6 +533,10 @@ function nehaverse_ogp_context(int $post_id): array
 function nehaverse_ogp_url(?int $post_id = null): string
 {
     $post_id = $post_id ?? (is_singular() ? (int) get_queried_object_id() : 0);
+    $post_id = nehaverse_resolve_ogp_post_id($post_id);
+    if ($post_id < 0) {
+        $post_id = 0;
+    }
     $context = nehaverse_ogp_context($post_id);
     $version = substr(md5($context['title'] . $context['description'] . $context['updated']), 0, 12);
     return add_query_arg('v', $version, home_url('/ogp/' . $post_id . '/'));
@@ -508,7 +586,8 @@ function nehaverse_ogp_wrap(Imagick $canvas, ImagickDraw $draw, string $text, in
     if ($line !== '' && count($lines) < $max_lines) {
         $lines[] = $line;
     }
-    if (count($lines) === $max_lines && count($characters) > mb_strlen(implode('', $lines))) {
+    $rendered_characters = preg_split('//u', implode('', $lines), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    if (count($lines) === $max_lines && count($characters) > count($rendered_characters)) {
         $lines[$max_lines - 1] = rtrim($lines[$max_lines - 1]) . '…';
     }
     return $lines;
@@ -520,12 +599,18 @@ function nehaverse_ogp_output(): void
     if ($value === null || $value === '') {
         return;
     }
+
+    $requested_id = absint($value);
+    $post_id = nehaverse_resolve_ogp_post_id($requested_id);
+    if ($post_id < 0) {
+        status_header(404);
+        nocache_headers();
+        exit;
+    }
     if (!class_exists('Imagick')) {
         status_header(503);
         exit;
     }
-
-    $post_id = max(0, absint($value));
     $context = nehaverse_ogp_context($post_id);
     $uploads = wp_get_upload_dir();
     $directory = trailingslashit($uploads['basedir']) . 'nehaverse-ogp';
@@ -606,3 +691,42 @@ function nehaverse_ogp_output(): void
     exit;
 }
 add_action('template_redirect', 'nehaverse_ogp_output');
+
+function nehaverse_resolve_ogp_post_id(int $post_id): int
+{
+    if ($post_id <= 0) {
+        return 0;
+    }
+
+    $post = get_post($post_id);
+    if (!$post instanceof WP_Post) {
+        return -1;
+    }
+
+    if (
+        $post->post_status !== 'publish'
+        || $post->post_password !== ''
+        || !is_post_publicly_viewable($post)
+    ) {
+        return -1;
+    }
+
+    return $post_id;
+}
+
+function nehaverse_delete_ogp_cache(int $post_id): void
+{
+    if ($post_id <= 0 || wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
+        return;
+    }
+
+    $uploads = wp_get_upload_dir();
+    $pattern = trailingslashit($uploads['basedir']) . 'nehaverse-ogp/card-' . $post_id . '-*.png';
+    foreach (glob($pattern) ?: [] as $file) {
+        if (is_file($file)) {
+            wp_delete_file($file);
+        }
+    }
+}
+add_action('save_post', 'nehaverse_delete_ogp_cache');
+add_action('before_delete_post', 'nehaverse_delete_ogp_cache');

@@ -4,9 +4,11 @@
 
 ## インストール
 
-1. `wordpress-theme/nehaverse` フォルダを WordPress の `wp-content/themes/` に配置します。
-2. 管理画面の「外観 > テーマ」から `Nehaverse` を有効化します。
-3. 「設定 > パーマリンク」で投稿名形式などを保存します。
+1. テーマ本体を WordPress の `wp-content/themes/nehaverse` に配置します。
+2. `plugins/nehaverse-core` を `wp-content/plugins/nehaverse-core` に配置し、有効化します。
+3. 管理画面の「外観 > テーマ」から `Nehaverse` を有効化します。
+
+`nehaverse_news` カスタム投稿タイプと `/news/` のrewrite設定は `nehaverse-core` プラグインが管理します。プラグイン有効化時にrewriteルールも自動更新されます。
 
 ## ヘッダーナビ
 
@@ -56,6 +58,13 @@ Discord Webhook 連携を使う場合は `wp-config.php` に次を追加して�
 
 ```php
 define('NEHAVERSE_DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/...');
+```
+
+お問い合わせフォームのBot対策にはCloudflare Turnstileを使用します。WordPressコンテナへ次の環境変数を設定してください。
+
+```text
+TURNSTILE_SITEKEY=公開サイトキー
+TURNSTILE_SECRET=秘密鍵
 ```
 
 未設定の場合、フォーム送信はエラー表示になります。

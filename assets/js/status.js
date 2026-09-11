@@ -58,7 +58,7 @@
   function showConfigurationError(root) {
     root.querySelector('[data-summary-dot]').className = 'nhv-status__summary-dot is-degraded';
     root.querySelector('[data-summary-title]').textContent = 'Status APIが未設定です';
-    root.querySelector('[data-summary-copy]').textContent = 'WordPress管理画面の「設定 → Nehaverse Status」でAPI URLを入力してください。';
+    root.querySelector('[data-summary-copy]').textContent = 'WordPress管理画面の「外観 → カスタマイズ → Service Status」でAPI URLを入力してください。';
   }
 
   function setup(root) {
