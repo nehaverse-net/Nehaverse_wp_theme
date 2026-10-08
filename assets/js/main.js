@@ -66,6 +66,21 @@
       })
     }
 
+    document.querySelectorAll('[data-copy]').forEach((button) => {
+      const label = button.querySelector('[data-copy-label]')
+      button.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy)
+          if (label) label.textContent = 'コピーしました'
+        } catch {
+          if (label) label.textContent = 'コピーできませんでした'
+        }
+        setTimeout(() => {
+          if (label) label.textContent = 'コピー'
+        }, 1800)
+      })
+    })
+
     const revealElements = document.querySelectorAll('.reveal-on-scroll, .animate-fade-up')
     if (revealElements.length) {
       if (!('IntersectionObserver' in window)) {

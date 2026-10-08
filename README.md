@@ -36,6 +36,14 @@
 - `rules`
 - `products`
 - `contact`
+- `dungeons`（資源サーバーのダンジョンガイド）
+- `abyss-tide`（ABYSS TIDE の紹介）
+
+トップ・ダンジョン・ABYSS TIDE の文言（サーバー説明、ダンジョン、敵、ステージ）は `inc/worlds.php` にまとめています。スクリーンショットは `assets/images/world/` にあります。
+
+## ABYSS TIDE の PV
+
+「外観 > カスタマイズ > ABYSS TIDE」の `PV URL` に YouTube の URL か動画ファイルの URL を入れると、ABYSS TIDE ページに表示されます。未設定の場合はタイトル画像が表示されます。
 
 トップページは `front-page.php` で表示されます。「設定 > 表示設定」で固定ページをホームページに指定してください。
 

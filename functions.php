@@ -9,6 +9,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once get_template_directory() . '/inc/worlds.php';
+
 function nehaverse_setup(): void
 {
     add_theme_support('title-tag');
@@ -37,7 +39,7 @@ function nehaverse_assets(): void
 {
     wp_enqueue_style(
         'nehaverse-fonts',
-        'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Poppins:wght@500;600&display=swap',
+        'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Poppins:wght@500;600&family=Oswald:wght@500;600&display=swap',
         [],
         null
     );
@@ -48,7 +50,8 @@ function nehaverse_assets(): void
         '6.5.1'
     );
     wp_enqueue_style('nehaverse-style', get_stylesheet_uri(), ['nehaverse-fonts', 'font-awesome'], '1.0.3');
-    wp_enqueue_script('nehaverse-main', get_template_directory_uri() . '/assets/js/main.js', [], '1.0.2', true);
+    wp_enqueue_style('nehaverse-worlds', get_template_directory_uri() . '/assets/css/worlds.css', ['nehaverse-style'], '1.0.0');
+    wp_enqueue_script('nehaverse-main', get_template_directory_uri() . '/assets/js/main.js', [], '1.0.3', true);
 
     if (is_front_page()) {
         wp_enqueue_style(
@@ -99,7 +102,10 @@ function nehaverse_asset(string $path): string
 function nehaverse_nav_items(): array
 {
     return [
-        'home' => ['label' => 'ホーム', 'url' => home_url('/')],
+        'home'       => ['label' => 'ホーム', 'url' => home_url('/')],
+        'servers'    => ['label' => 'サーバー', 'url' => home_url('/#servers')],
+        'dungeons'   => ['label' => 'ダンジョン', 'url' => home_url('/dungeons/')],
+        'abyss-tide' => ['label' => 'ABYSS TIDE', 'url' => home_url('/abyss-tide/')],
     ];
 }
 
@@ -246,6 +252,22 @@ function nehaverse_customize_register(WP_Customize_Manager $wp_customize): void
         'type'    => 'checkbox',
     ]);
 
+    $wp_customize->add_section('nehaverse_abyss', [
+        'title'       => __('ABYSS TIDE', 'nehaverse'),
+        'description' => __('ABYSS TIDEページのPV。YouTubeのURLか動画ファイルのURLを指定します。', 'nehaverse'),
+        'priority'    => 84,
+    ]);
+
+    $wp_customize->add_setting('nehaverse_abyss_pv_url', [
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ]);
+    $wp_customize->add_control('nehaverse_abyss_pv_url', [
+        'label'   => __('PV URL', 'nehaverse'),
+        'section' => 'nehaverse_abyss',
+        'type'    => 'url',
+    ]);
+
     $wp_customize->add_section('nehaverse_status', [
         'title'       => __('Service Status', 'nehaverse'),
         'description' => __('Cloudflare WorkerのステータスAPIを設定します。', 'nehaverse'),
@@ -280,7 +302,7 @@ function nehaverse_current_nav_key(): string
         return 'home';
     }
 
-    foreach (['minecraft', 'rules', 'products', 'contact'] as $slug) {
+    foreach (['minecraft', 'rules', 'products', 'contact', 'dungeons', 'abyss-tide'] as $slug) {
         if (is_page($slug)) {
             return $slug;
         }

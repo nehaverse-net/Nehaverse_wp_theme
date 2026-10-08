@@ -1,0 +1,1475 @@
+/*
+ * Server / dungeon / ABYSS TIDE layouts.
+ * Uses the palette tokens defined in style.css.
+ */
+
+:root {
+  --world-survival: var(--accent-teal);
+  --world-resource: var(--accent-blue);
+  --world-pvp: var(--accent-pink);
+  --abyss-deep: #0d1430;
+  --abyss-mid: #17214a;
+  --abyss-glow: #8fe3ff;
+  --radius-lg: 28px;
+  --radius-md: 18px;
+}
+
+.nv-eyebrow {
+  display: inline-block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-indigo);
+}
+
+.nv-section {
+  width: var(--max-width);
+  margin: 0 auto;
+  padding: 72px 0;
+}
+
+.nv-section--tight {
+  padding: 32px 0;
+}
+
+.nv-section--more {
+  padding: 32px 0 80px;
+}
+
+.nv-heading {
+  max-width: 680px;
+  margin: 0 0 36px;
+}
+
+.nv-heading h2 {
+  margin: 6px 0 12px;
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  line-height: 1.3;
+}
+
+.nv-heading p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.nv-heading--row {
+  max-width: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Hero ---------- */
+
+.nv-hero {
+  width: var(--max-width);
+  margin: 0 auto;
+  padding: 64px 0 32px;
+}
+
+.nv-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.nv-hero__title {
+  margin: 12px 0 20px;
+  font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  color: var(--accent-navy);
+}
+
+.nv-hero__text {
+  margin: 0 0 28px;
+  color: var(--text-secondary);
+  max-width: 34em;
+}
+
+.nv-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nv-hero__actions .btn + .btn {
+  margin-left: 0;
+}
+
+.nv-address {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 8px 8px 8px 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(127, 132, 255, 0.25);
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+  flex-wrap: wrap;
+}
+
+.nv-address__label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.nv-address__value {
+  font-family: 'Poppins', monospace;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--accent-navy);
+}
+
+.nv-address__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: var(--accent-navy);
+  color: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.nv-address__copy:hover {
+  background: var(--accent-indigo);
+}
+
+.nv-hero__visual {
+  position: relative;
+}
+
+.nv-hero__main {
+  margin: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(42, 55, 97, 0.25);
+  aspect-ratio: 16 / 10;
+  transform: rotate(1.2deg);
+}
+
+.nv-hero__main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nv-hero__chips {
+  position: absolute;
+  left: -20px;
+  bottom: -18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-card);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-navy);
+  width: max-content;
+}
+
+.nv-chip__dot,
+.nv-world__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--world-color, var(--accent-indigo));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--world-color, var(--accent-indigo)) 25%, transparent);
+  flex-shrink: 0;
+}
+
+.nv-chip--survival,
+.nv-world--survival,
+.nv-switch__item--survival,
+.nv-compare__row--survival {
+  --world-color: var(--world-survival);
+}
+
+.nv-chip--resource,
+.nv-world--resource,
+.nv-switch__item--resource,
+.nv-compare__row--resource {
+  --world-color: var(--world-resource);
+}
+
+.nv-chip--pvp,
+.nv-world--pvp,
+.nv-switch__item--pvp,
+.nv-compare__row--pvp {
+  --world-color: var(--world-pvp);
+}
+
+/* ---------- Nehal speech bubble ---------- */
+
+.nv-nehal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nv-nehal__icon {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  animation: nv-float 4s ease-in-out infinite;
+}
+
+.nv-nehal__bubble {
+  position: relative;
+  margin: 0;
+  padding: 10px 16px;
+  background: #fff;
+  border: 1.5px solid #111;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  color: #111;
+}
+
+.nv-nehal__name {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+.nv-nehal--hero {
+  position: absolute;
+  right: -12px;
+  bottom: -30px;
+}
+
+.nv-nehal--hero .nv-nehal__icon {
+  width: 72px;
+  height: 72px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: var(--shadow-card);
+}
+
+@keyframes nv-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ---------- Server switch ---------- */
+
+.nv-switch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+.nv-switch__item {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: 20px 22px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.nv-switch__item::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--world-color);
+}
+
+.nv-switch__item:hover {
+  transform: translateY(-3px);
+  color: inherit;
+}
+
+.nv-switch__num {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.nv-switch__name {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.nv-switch__tag {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ---------- World cards ---------- */
+
+.nv-world {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+  padding: 40px;
+  margin-bottom: 40px;
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--world-color) 22%, transparent), transparent 55%),
+    rgba(255, 255, 255, 0.88);
+  box-shadow: var(--shadow-soft);
+  scroll-margin-top: 96px;
+}
+
+.nv-world--flip .nv-world__media {
+  order: 2;
+}
+
+.nv-world--flip {
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--world-color) 22%, transparent), transparent 55%),
+    rgba(255, 255, 255, 0.88);
+}
+
+.nv-world__media {
+  display: grid;
+  gap: 12px;
+}
+
+.nv-world__image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 22px;
+}
+
+.nv-world__thumbs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.nv-world__thumbs img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.nv-world__label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--text-secondary);
+}
+
+.nv-world__name {
+  margin: 6px 0 2px;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+.nv-world__tagline {
+  margin: 0 0 14px;
+  font-weight: 700;
+  color: var(--accent-navy);
+  opacity: 0.75;
+}
+
+.nv-world__summary {
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+}
+
+.nv-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 0 0 22px;
+}
+
+.nv-stats div {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--world-color) 14%, #fff);
+}
+
+.nv-stats dt {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.nv-stats dd {
+  margin: 0;
+  font-family: 'Poppins', 'Zen Kaku Gothic New', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--accent-navy);
+}
+
+.nv-features {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+
+.nv-features li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.nv-features i {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: var(--accent-navy);
+  color: var(--world-color);
+  font-size: 0.9rem;
+}
+
+.nv-features strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.nv-features span {
+  display: block;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.nv-world__note {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 158, 214, 0.14);
+  font-size: 0.85rem;
+  color: var(--accent-navy);
+}
+
+.nv-world__note i {
+  color: #e2649f;
+}
+
+.nv-world__link {
+  font-weight: 700;
+  color: var(--accent-indigo);
+}
+
+/* ---------- Compare table ---------- */
+
+.nv-compare {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-card);
+}
+
+.nv-compare table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+}
+
+.nv-compare caption {
+  text-align: left;
+  padding: 24px 28px 8px;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.nv-compare th,
+.nv-compare td {
+  padding: 16px 28px;
+  text-align: left;
+  border-bottom: 1px solid rgba(42, 55, 97, 0.08);
+}
+
+.nv-compare thead th {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.nv-compare tbody th {
+  white-space: nowrap;
+}
+
+.nv-compare tbody th .nv-world__dot {
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.nv-compare tbody tr:last-child > * {
+  border-bottom: none;
+}
+
+/* ---------- Spotlights ---------- */
+
+.nv-spotlights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.nv-spotlight {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 360px;
+  border-radius: 32px;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+
+.nv-spotlight img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  transition: transform 0.6s ease;
+}
+
+.nv-spotlight:hover img {
+  transform: scale(1.04);
+}
+
+.nv-spotlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.nv-spotlight--dungeon::after {
+  background: linear-gradient(180deg, rgba(42, 55, 97, 0) 30%, rgba(42, 55, 97, 0.88));
+}
+
+.nv-spotlight--abyss::after {
+  background: linear-gradient(180deg, rgba(13, 20, 48, 0.35), rgba(13, 20, 48, 0.94));
+}
+
+.nv-spotlight:hover,
+.nv-spotlight:focus {
+  color: #fff;
+}
+
+.nv-spotlight__body {
+  padding: 32px;
+}
+
+.nv-spotlight .nv-eyebrow {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.nv-spotlight h3 {
+  margin: 4px 0 8px;
+  font-size: 1.8rem;
+}
+
+.nv-spotlight p {
+  margin: 0 0 14px;
+  opacity: 0.9;
+}
+
+.nv-spotlight__more {
+  font-weight: 700;
+}
+
+.nv-abyss-logo {
+  font-family: 'Oswald', 'Bahnschrift', 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #eafaff;
+  text-shadow: 0 0 18px rgba(94, 200, 240, 0.85), 0 0 2px #5ec8f0;
+}
+
+/* ---------- Gallery ---------- */
+
+.nv-gallery {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 32%);
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scroll-snap-type: x mandatory;
+}
+
+.nv-gallery img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 20px;
+  scroll-snap-align: start;
+}
+
+/* ---------- Getting started ---------- */
+
+.nv-start {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 40px;
+  padding: 48px;
+  border-radius: 36px;
+  background: linear-gradient(135deg, rgba(127, 132, 255, 0.12), rgba(94, 200, 240, 0.12));
+}
+
+.nv-start__intro h2 {
+  margin: 6px 0 10px;
+  font-size: 2rem;
+}
+
+.nv-start__intro p {
+  color: var(--text-secondary);
+}
+
+.nv-start__mascot {
+  width: 150px;
+  height: 150px;
+  margin-top: 12px;
+  animation: nv-float 4s ease-in-out infinite;
+}
+
+.nv-steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.nv-steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 18px 20px 18px 72px;
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(66, 87, 135, 0.1);
+}
+
+.nv-steps li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--accent-indigo);
+}
+
+.nv-steps strong {
+  display: block;
+}
+
+.nv-steps span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ---------- More ---------- */
+
+.nv-more {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.nv-more__card {
+  display: block;
+  padding: 18px 18px 22px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease;
+}
+
+.nv-more__card:hover {
+  transform: translateY(-4px);
+  color: inherit;
+}
+
+.nv-more__card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+.nv-more__card h3 {
+  margin: 4px 0 6px;
+}
+
+.nv-more__card p {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.nv-more__link {
+  font-weight: 700;
+  color: var(--accent-indigo);
+}
+
+/* ---------- Dungeons page ---------- */
+
+.nv-cover {
+  position: relative;
+  width: var(--max-width);
+  margin: 32px auto 0;
+  min-height: 440px;
+  border-radius: 36px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  isolation: isolate;
+  color: #fff;
+}
+
+.nv-cover__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.nv-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(42, 55, 97, 0.85), rgba(42, 55, 97, 0.1) 70%);
+}
+
+.nv-cover__inner {
+  padding: 48px;
+  max-width: 620px;
+}
+
+.nv-cover .nv-eyebrow {
+  color: var(--accent-blue);
+}
+
+.nv-cover__title {
+  margin: 6px 0 12px;
+  font-size: clamp(2rem, 4.4vw, 3rem);
+}
+
+.nv-cover__text {
+  margin: 0;
+  opacity: 0.92;
+}
+
+.nv-levels {
+  padding: 40px;
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-card);
+}
+
+.nv-levels__head h2 {
+  margin: 6px 0 8px;
+}
+
+.nv-levels__head p {
+  margin: 0 0 28px;
+  color: var(--text-secondary);
+}
+
+.nv-levels__meter {
+  position: relative;
+  padding: 0 0 8px;
+}
+
+.nv-levels__track {
+  position: relative;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(42, 55, 97, 0.08);
+}
+
+.nv-levels__band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+}
+
+.nv-levels__band--low {
+  background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+}
+
+.nv-levels__band--high {
+  background: linear-gradient(90deg, var(--accent-indigo), var(--accent-pink));
+}
+
+.nv-levels__labels,
+.nv-levels__scale {
+  position: relative;
+}
+
+.nv-levels__labels {
+  height: 58px;
+  margin-top: 10px;
+}
+
+.nv-levels__labels div {
+  position: absolute;
+  top: 0;
+}
+
+.nv-levels__labels strong {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
+  color: var(--accent-navy);
+}
+
+.nv-levels__labels span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.nv-levels__scale {
+  height: 20px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.nv-levels__scale span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.nv-levels__scale span:first-child {
+  transform: none;
+}
+
+.nv-levels__scale span:last-child {
+  transform: translateX(-100%);
+}
+
+.nv-hazards {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.nv-hazards li {
+  padding: 18px;
+  border-radius: var(--radius-md);
+  background: rgba(127, 132, 255, 0.08);
+}
+
+.nv-hazards i {
+  color: var(--accent-indigo);
+  font-size: 1.2rem;
+}
+
+.nv-hazards strong {
+  display: block;
+  margin: 8px 0 2px;
+}
+
+.nv-hazards span {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.nv-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(94, 200, 240, 0.18);
+  color: var(--accent-navy);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.nv-dungeon-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding: 32px;
+  margin-bottom: 24px;
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-soft);
+}
+
+.nv-dungeon-feature__gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.nv-dungeon-feature__gallery img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.nv-dungeon-feature__gallery img:first-child {
+  grid-column: 1 / -1;
+  border-radius: 20px;
+}
+
+.nv-dungeon-feature__body h3 {
+  margin: 12px 0 8px;
+  font-size: 1.8rem;
+}
+
+.nv-dungeon-feature__body > p {
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+}
+
+.nv-dungeons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.nv-dungeon {
+  padding: 28px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-card);
+}
+
+.nv-dungeon__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 14px;
+  border-radius: 16px;
+  background: var(--accent-navy);
+  color: var(--accent-blue);
+  font-size: 1.3rem;
+}
+
+.nv-dungeon h3 {
+  margin: 10px 0 6px;
+}
+
+.nv-dungeon p:last-child {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+.nv-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 36px 40px;
+  border-radius: 32px;
+  background: linear-gradient(135deg, rgba(127, 132, 255, 0.14), rgba(255, 161, 215, 0.12));
+}
+
+.nv-banner h2 {
+  margin: 0 0 6px;
+}
+
+.nv-banner p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+/* ---------- ABYSS TIDE page ---------- */
+
+.nv-abyss {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(94, 200, 240, 0.22), transparent 60%),
+    linear-gradient(180deg, var(--abyss-mid), var(--abyss-deep) 40%);
+  color: #dfe8ff;
+  padding-bottom: 80px;
+}
+
+.nv-abyss h2,
+.nv-abyss h3 {
+  color: #fff;
+}
+
+.nv-abyss code {
+  color: var(--abyss-glow);
+}
+
+.nv-abyss__hero {
+  position: relative;
+  overflow: hidden;
+  padding: 88px 0 48px;
+  text-align: center;
+}
+
+.nv-abyss__particles {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 10% 20%, rgba(143, 227, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 30% 70%, rgba(143, 227, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 55% 35%, rgba(143, 227, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 75% 80%, rgba(143, 227, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 90% 15%, rgba(143, 227, 255, 0.6), transparent);
+  background-size: 260px 260px;
+  animation: nv-drift 30s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes nv-drift {
+  from { background-position: 0 0; }
+  to { background-position: 0 -520px; }
+}
+
+.nv-abyss__hero-inner {
+  position: relative;
+  width: var(--max-width);
+  margin: 0 auto;
+}
+
+.nv-abyss__kicker {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  color: #e6e33d;
+}
+
+.nv-abyss__title {
+  margin: 10px 0 0;
+  font-size: clamp(2.8rem, 9vw, 6rem);
+  line-height: 1.05;
+}
+
+.nv-abyss__kana {
+  margin: 6px 0 0;
+  letter-spacing: 0.5em;
+  color: #e6e33d;
+}
+
+.nv-abyss__lead {
+  margin: 20px 0 40px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.nv-abyss__pv {
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(143, 227, 255, 0.35);
+  box-shadow: 0 0 60px rgba(94, 200, 240, 0.25);
+  background: #000;
+}
+
+.nv-abyss__pv iframe,
+.nv-abyss__pv video,
+.nv-abyss__pv img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  display: block;
+}
+
+.nv-abyss__section {
+  width: var(--max-width);
+  margin: 0 auto;
+  padding: 48px 0;
+}
+
+.nv-abyss__specs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(143, 227, 255, 0.2);
+  border: 1px solid rgba(143, 227, 255, 0.2);
+}
+
+.nv-abyss__specs div {
+  padding: 28px 20px;
+  text-align: center;
+  background: rgba(13, 20, 48, 0.85);
+}
+
+.nv-abyss__specs strong {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.6rem;
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 0 16px rgba(94, 200, 240, 0.7);
+}
+
+.nv-abyss__specs small {
+  font-size: 1rem;
+  margin-left: 2px;
+}
+
+.nv-abyss__specs span {
+  font-size: 0.85rem;
+  color: #9fb0d8;
+}
+
+.nv-abyss__intro {
+  max-width: 720px;
+  margin: 32px auto 0;
+  text-align: center;
+}
+
+.nv-abyss__heading {
+  margin-bottom: 24px;
+}
+
+.nv-abyss__heading span {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  color: var(--abyss-glow);
+}
+
+.nv-abyss__heading h2 {
+  margin: 4px 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.nv-abyss__flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.nv-abyss__flow li {
+  position: relative;
+  padding: 22px 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(143, 227, 255, 0.16);
+}
+
+.nv-abyss__flow li > span {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  color: var(--abyss-glow);
+}
+
+.nv-abyss__flow strong {
+  display: block;
+  margin: 4px 0 6px;
+  color: #fff;
+}
+
+.nv-abyss__flow p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #a9b6da;
+}
+
+.nv-abyss__stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.nv-abyss__stages li {
+  position: relative;
+  padding: 26px 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(94, 200, 240, 0.18), rgba(127, 132, 255, 0.08));
+  border: 1px solid rgba(143, 227, 255, 0.2);
+}
+
+.nv-abyss__stage-no {
+  position: absolute;
+  right: 14px;
+  top: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: rgba(143, 227, 255, 0.12);
+}
+
+.nv-abyss__stages strong {
+  display: block;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.nv-abyss__stage-en {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: #9fb0d8;
+}
+
+.nv-abyss__enemies {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.nv-abyss__shot {
+  margin: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(143, 227, 255, 0.2);
+}
+
+.nv-abyss__shot img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.nv-abyss__tiers {
+  display: grid;
+  gap: 14px;
+}
+
+.nv-abyss__tier {
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 4px solid var(--tier-color);
+}
+
+.nv-abyss__tier--normal { --tier-color: var(--accent-teal); }
+.nv-abyss__tier--hard { --tier-color: #ffb36b; }
+.nv-abyss__tier--nightmare { --tier-color: var(--accent-pink); }
+
+.nv-abyss__tier h3 {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: var(--tier-color);
+}
+
+.nv-abyss__tier ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nv-abyss__tier li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.nv-abyss__duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.nv-abyss__duo img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.nv-abyss__cta {
+  text-align: center;
+}
+
+.nv-abyss__cta h2 {
+  margin: 0 0 8px;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.14em;
+  text-shadow: 0 0 18px rgba(94, 200, 240, 0.7);
+}
+
+.nv-abyss__cta p {
+  margin: 0 0 24px;
+}
+
+main:has(> .nv-abyss) + .site-footer {
+  margin-top: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 960px) {
+  .nv-hero__inner,
+  .nv-world,
+  .nv-start,
+  .nv-dungeon-feature,
+  .nv-abyss__enemies {
+    grid-template-columns: 1fr;
+  }
+
+  .nv-world--flip .nv-world__media {
+    order: 0;
+  }
+
+  .nv-world {
+    padding: 24px;
+    gap: 28px;
+  }
+
+  .nv-hero__visual {
+    margin-top: 24px;
+  }
+
+  .nv-spotlights,
+  .nv-dungeons,
+  .nv-more {
+    grid-template-columns: 1fr;
+  }
+
+  .nv-abyss__flow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .nv-abyss__stages,
+  .nv-abyss__specs {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .nv-section,
+  .nv-hero,
+  .nv-cover,
+  .nv-abyss__section,
+  .nv-abyss__hero-inner {
+    width: calc(100% - 32px);
+  }
+
+  .nv-switch,
+  .nv-features,
+  .nv-hazards,
+  .nv-abyss__flow,
+  .nv-abyss__duo {
+    grid-template-columns: 1fr;
+  }
+
+  .nv-switch {
+    gap: 10px;
+  }
+
+  .nv-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nv-hero__chips {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .nv-nehal--hero {
+    position: static;
+    margin-top: 16px;
+  }
+
+  .nv-start,
+  .nv-levels,
+  .nv-cover__inner,
+  .nv-banner {
+    padding: 24px;
+  }
+
+  .nv-levels__labels {
+    height: 64px;
+  }
+
+  .nv-levels__labels strong {
+    font-size: 1rem;
+  }
+
+  .nv-address {
+    border-radius: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-nehal__icon,
+  .nv-start__mascot,
+  .nv-abyss__particles {
+    animation: none;
+  }
+}
