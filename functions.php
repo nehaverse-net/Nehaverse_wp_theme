@@ -39,7 +39,7 @@ function nehaverse_assets(): void
 {
     wp_enqueue_style(
         'nehaverse-fonts',
-        'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Poppins:wght@500;600&family=Oswald:wght@500;600&display=swap',
+        'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Poppins:wght@500;600&family=Oswald:wght@500;600&family=DotGothic16&display=swap',
         [],
         null
     );
