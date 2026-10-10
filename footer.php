@@ -13,26 +13,27 @@ if (!defined('ABSPATH')) {
     <footer class="site-footer">
         <div class="site-footer__inner">
             <div class="footer-brand">
-                <?php nehaverse_brand_wordmark(); ?>
-                <div>
-                    <p class="footer-title">Nehaverse</p>
-                    <p class="footer-text">技術で楽しめるコンテンツを、コミュニティとともに。</p>
-                </div>
+                <a class="brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php echo esc_attr((get_bloginfo('name') ?: 'Nehaverse') . ' ホーム'); ?>"><?php nehaverse_brand_wordmark(); ?></a>
+                <p class="footer-text">技術で楽しめるコンテンツを、コミュニティとともに。</p>
             </div>
             <div class="footer-links">
                 <div>
-                    <h4>リンク</h4>
-                    <ul>
-                        <?php foreach (nehaverse_nav_items() as $item) : ?>
-                            <li><a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a></li>
-                        <?php endforeach; ?>
-                    </ul>
+                    <h4>Site</h4>
+                    <?php if (has_nav_menu('footer')) : ?>
+                        <?php wp_nav_menu(['theme_location' => 'footer', 'container' => false, 'depth' => 1, 'fallback_cb' => false]); ?>
+                    <?php else : ?>
+                        <ul>
+                            <?php foreach (nehaverse_nav_items() as $item) : ?>
+                                <li><a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
                 </div>
                 <div>
                     <h4>Discord</h4>
                     <ul>
-                        <li><a href="https://discord.gg/P4edaExrR4" target="_blank" rel="noopener noreferrer">コミュニティサーバー</a></li>
-                        <li><a href="https://discord.gg/guYdDUxaBB" target="_blank" rel="noopener noreferrer">サポートサーバー</a></li>
+                        <li><a href="<?php echo esc_url(NEHAVERSE_DISCORD_URL); ?>" target="_blank" rel="noopener noreferrer">コミュニティサーバー</a></li>
+                        <li><a href="<?php echo esc_url(NEHAVERSE_SUPPORT_URL); ?>" target="_blank" rel="noopener noreferrer">サポートサーバー</a></li>
                     </ul>
                 </div>
                 <div>
@@ -44,7 +45,8 @@ if (!defined('ABSPATH')) {
                 </div>
             </div>
         </div>
-        <p class="site-footer__copy">&copy; <?php echo esc_html(gmdate('Y')); ?> Nehaverse</p>
+        <p class="footer-wordmark" aria-hidden="true">Nehaverse</p>
+        <p class="site-footer__copy"><span>&copy; <?php echo esc_html(wp_date('Y')); ?> NEHAVERSE</span><span>BUILD · PLAY · CONNECT</span></p>
     </footer>
 </div>
 <?php wp_footer(); ?>

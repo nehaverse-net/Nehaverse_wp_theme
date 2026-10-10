@@ -21,31 +21,26 @@ $header_cta = nehaverse_header_cta();
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<?php if (is_front_page()) : ?>
+<div class="loader" aria-hidden="true"><div class="loader__inner"><img class="loader__logo" src="<?php echo nehaverse_asset('images/logo-dark.png'); ?>" alt="" width="174" height="192"><span class="loader__name">NEHAVERSE</span><span class="loader__bar"><span></span></span></div></div>
+<?php endif; ?>
+<a class="skip-link" href="#main-content">本文へスキップ</a>
+<div class="scroll-progress" aria-hidden="true"></div>
 <div class="app-shell">
     <header class="site-header">
         <div class="site-header__inner">
             <a class="brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php echo esc_attr((get_bloginfo('name') ?: 'Nehaverse') . ' ホーム'); ?>">
                 <?php nehaverse_brand_wordmark(); ?>
             </a>
-            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="メニューを開く">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav class="site-nav" id="site-nav" aria-label="<?php esc_attr_e('Primary navigation', 'nehaverse'); ?>">
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="メニューを開く"><span></span><span></span><span></span></button>
+            <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション">
                 <?php nehaverse_render_primary_nav($current); ?>
-                <?php if ($header_cta['label'] !== '' && $header_cta['url'] !== '') : ?>
-                    <div class="nav-cta">
-                        <a
-                            class="btn btn-primary"
-                            href="<?php echo esc_url($header_cta['url']); ?>"
-                            <?php echo $header_cta['new_tab'] ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>
-                        >
-                            <?php echo esc_html($header_cta['label']); ?>
-                        </a>
-                    </div>
-                <?php endif; ?>
             </nav>
+            <?php if ($header_cta['label'] !== '' && $header_cta['url'] !== '') : ?>
+                <a class="btn btn-primary header-cta" href="<?php echo esc_url($header_cta['url']); ?>"<?php echo $header_cta['new_tab'] ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>>
+                    <?php echo esc_html($header_cta['label']); ?> <?php echo nehaverse_arrow(); ?>
+                </a>
+            <?php endif; ?>
         </div>
     </header>
-    <main>
+    <main id="main-content" tabindex="-1">

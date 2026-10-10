@@ -1,0 +1,73 @@
+/* ===== Minecraft page ===== */
+.mc-hero__actions { margin-top: 36px; align-items: center; }
+
+.mc-banner { width: var(--wrap); margin: clamp(48px, 6vw, 88px) auto 0; }
+
+.mc-worlds { width: var(--wrap); margin-inline: auto; padding-bottom: clamp(48px, 6vw, 96px); }
+.mc-worlds__head { padding-top: clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); }
+.mc-worlds__nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+.mc-worlds__nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border: 1px solid var(--line-strong);
+  font-weight: 700;
+  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+}
+.mc-worlds__nav a span { color: var(--accent-deep); font-family: var(--font-en); font-size: 0.78rem; letter-spacing: 0.14em; transition: color 300ms ease; }
+.mc-worlds__nav a:hover { background: var(--accent-ink); border-color: var(--accent-ink); color: #fff; }
+.mc-worlds__nav a:hover span { color: var(--accent-strong); }
+
+.mc-world { padding-top: clamp(80px, 10vw, 140px); scroll-margin-top: var(--header-h); }
+.mc-world__header { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px clamp(20px, 3vw, 40px); align-items: end; margin-bottom: 32px; }
+.mc-world__num {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent-strong);
+  font-family: var(--font-en);
+  font-size: clamp(5rem, 12vw, 10rem);
+  font-weight: 700;
+  line-height: 0.78;
+}
+.mc-world__header .eyebrow { margin-bottom: 8px; }
+.mc-world__header h2 { margin: 0 0 16px; font-size: clamp(2rem, 4.4vw, 3.6rem); font-weight: 900; line-height: 1.2; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.mc-world__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc-world__tags span { padding: 4px 12px; border: 1px solid var(--line-strong); color: var(--muted); font-size: 0.82rem; }
+
+.mc-world__visual { margin: 0; }
+.mc-world__content { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); margin-top: 40px; }
+.mc-world__lead { margin: 0; font-size: clamp(1.25rem, 2vw, 1.6rem); font-weight: 900; line-height: 1.65; text-wrap: pretty; }
+.mc-world__body p { margin: 0 0 16px; color: var(--muted); line-height: 1.95; overflow-wrap: anywhere; }
+.mc-world__body p:last-child { margin-bottom: 0; }
+
+.connect { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; }
+.connect__info h2 { margin: 0 0 8px; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 900; }
+.connect__list { margin: 28px 0 0; }
+.connect__list > div { display: grid; grid-template-columns: 9em minmax(0, 1fr); gap: 16px; align-items: center; padding: 16px 0; border-top: 1px solid var(--line); }
+.connect__list dt { color: var(--muted); font-size: 0.9rem; }
+.connect__list dd { margin: 0; }
+.connect__cta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  padding: clamp(28px, 3vw, 40px);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.connect__cta-label { margin: 0; font-family: var(--font-en); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
+.connect__cta-text { margin: 0; font-size: clamp(1.3rem, 2.2vw, 1.8rem); font-weight: 900; line-height: 1.5; }
+.connect__cta .btn-light { align-self: flex-start; background: var(--accent-ink); color: #fff; }
+.connect__cta .btn-light::before { background: #fff; }
+.connect__cta .btn-light:hover { color: var(--accent-ink); }
+
+@media (max-width: 960px) {
+  .connect { grid-template-columns: minmax(0, 1fr); }
+  .mc-world__content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+}
+@media (max-width: 640px) {
+  .mc-world__header { grid-template-columns: minmax(0, 1fr); }
+  .mc-world__num { font-size: 4.5rem; }
+  .connect__list > div { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .mc-worlds__nav a { flex: 1 1 100%; }
+}

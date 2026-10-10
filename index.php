@@ -1,6 +1,6 @@
 <?php
 /**
- * Main index template.
+ * Blog index, archives and search results.
  *
  * @package Nehaverse
  */
@@ -10,36 +10,69 @@ if (!defined('ABSPATH')) {
 }
 
 get_header();
-?>
-<section class="page-lead">
-    <div class="page-lead__inner">
-        <span class="page-lead__badge animate-fade-up"><?php echo is_post_type_archive('nehaverse_news') ? esc_html('News') : esc_html('Journal'); ?></span>
-        <h1 class="page-lead__title animate-fade-up" style="animation-delay: 0.1s">
-            <?php echo is_post_type_archive('nehaverse_news') ? esc_html('お知らせ') : esc_html(get_the_archive_title() ?: get_bloginfo('name')); ?>
-        </h1>
-        <?php if (get_the_archive_description()) : ?>
-            <p class="page-lead__subtitle animate-fade-up" style="animation-delay: 0.2s"><?php echo wp_kses_post(get_the_archive_description()); ?></p>
-        <?php endif; ?>
-    </div>
-</section>
 
-<section class="section reveal-on-scroll">
-    <div class="news-list">
-        <?php if (have_posts()) : ?>
-            <?php while (have_posts()) : the_post(); ?>
-                <article class="news-card">
-                    <div class="news-card__meta">
-                        <time class="news-card__date" datetime="<?php echo esc_attr(get_the_date('c')); ?>"><?php echo esc_html(get_the_date('Y-m-d')); ?></time>
-                    </div>
-                    <h2 class="news-card__title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                    <p class="news-card__body"><?php echo esc_html(wp_trim_words(get_the_excerpt() ?: wp_strip_all_tags(get_the_content()), 64)); ?></p>
-                </article>
-            <?php endwhile; ?>
-            <?php the_posts_pagination(); ?>
-        <?php else : ?>
-            <p class="news-section__empty">表示できる記事がありません。</p>
+if (is_search()) {
+    $eyebrow = 'Search';
+    $title = sprintf('「%s」の検索結果', get_search_query());
+    $lead = sprintf('%d件の記事が見つかりました。', (int) $GLOBALS['wp_query']->found_posts);
+} elseif (is_post_type_archive('nehaverse_news')) {
+    $eyebrow = 'News';
+    $title = 'お知らせ';
+    $lead = 'メンテナンス、イベント、アップデートの最新情報。';
+} elseif (is_category()) {
+    $eyebrow = 'Category';
+    $title = single_cat_title('', false);
+    $lead = wp_strip_all_tags(category_description());
+} elseif (is_tag()) {
+    $eyebrow = 'Tag';
+    $title = '#' . single_tag_title('', false);
+    $lead = wp_strip_all_tags(tag_description());
+} elseif (is_archive()) {
+    $eyebrow = 'Archive';
+    $title = wp_strip_all_tags(get_the_archive_title());
+    $lead = wp_strip_all_tags(get_the_archive_description());
+} else {
+    $posts_page = (int) get_option('page_for_posts');
+    $eyebrow = 'News & Journal';
+    $title = $posts_page ? get_the_title($posts_page) : 'ニュース';
+    $lead = 'Nehaverseの最新情報、開発記録、イベントレポート。';
+}
+
+nehaverse_page_hero($eyebrow, $title, $lead, 'Journal');
+
+$categories = get_categories(['hide_empty' => true, 'number' => 12]);
+?>
+<section class="section archive-list" aria-label="記事一覧">
+    <div class="archive-list__tools" data-reveal>
+        <?php if ($categories && !is_post_type_archive('nehaverse_news')) : ?>
+            <nav class="filter" aria-label="カテゴリー">
+                <a class="filter__item<?php echo (is_home() && !is_category()) ? ' is-active' : ''; ?>" href="<?php echo esc_url(nehaverse_blog_url()); ?>">すべて</a>
+                <?php foreach ($categories as $category) : ?>
+                    <a class="filter__item<?php echo is_category($category->term_id) ? ' is-active' : ''; ?>" href="<?php echo esc_url(get_category_link($category)); ?>"><?php echo esc_html($category->name); ?></a>
+                <?php endforeach; ?>
+            </nav>
         <?php endif; ?>
+        <?php get_search_form(); ?>
     </div>
+
+    <?php if (have_posts()) : ?>
+        <div class="post-grid">
+            <?php
+            $i = 0;
+            while (have_posts()) :
+                the_post();
+                get_template_part('template-parts/post-card', null, ['delay' => $i++]);
+            endwhile;
+            ?>
+        </div>
+        <?php nehaverse_pagination(); ?>
+    <?php else : ?>
+        <div class="empty-state" data-reveal>
+            <p class="empty-state__title">記事が見つかりませんでした</p>
+            <p>キーワードを変えて検索するか、ホームから最新情報をご覧ください。</p>
+            <a class="btn btn-primary" href="<?php echo esc_url(home_url('/')); ?>">ホームへ戻る <?php echo nehaverse_arrow(); ?></a>
+        </div>
+    <?php endif; ?>
 </section>
 <?php
 get_footer();

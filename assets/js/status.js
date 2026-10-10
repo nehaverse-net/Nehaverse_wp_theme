@@ -4,6 +4,7 @@
   const formatLatency = (value) => Number.isFinite(value) ? `${Math.round(value)} ms` : '—';
 
   function updateCard(root, service) {
+    if (!['website', 'minecraft'].includes(service.id)) return;
     const card = root.querySelector(`[data-service="${service.id}"]`);
     if (!card) return;
     card.setAttribute('aria-busy', 'false');
@@ -57,8 +58,25 @@
 
   function showConfigurationError(root) {
     root.querySelector('[data-summary-dot]').className = 'nhv-status__summary-dot is-degraded';
-    root.querySelector('[data-summary-title]').textContent = 'Status APIが未設定です';
-    root.querySelector('[data-summary-copy]').textContent = 'WordPress管理画面の「設定 → Nehaverse Status」でAPI URLを入力してください。';
+    root.querySelector('[data-summary-title]').textContent = '稼働状況は現在表示していません';
+    root.querySelector('[data-summary-copy]').textContent = '最新の案内はDiscordコミュニティでご確認ください。';
+    resetCards(root, '未確認');
+    root.querySelector('[data-status-refresh]').disabled = true;
+    root.querySelector('.nhv-status__footer p').textContent = '稼働状況の自動更新は停止しています。';
+  }
+
+  function resetCards(root, label) {
+    root.querySelectorAll('[data-service]').forEach((card) => {
+      card.setAttribute('aria-busy', 'false');
+      card.querySelector('.nhv-status__pill').className = 'nhv-status__pill';
+      card.querySelector('.nhv-status__pill b').textContent = label;
+      card.querySelectorAll('[data-metric]').forEach((metric) => {
+        metric.textContent = metric.dataset.metric === 'version' ? 'Discordで最新情報をご確認ください。' : '—';
+      });
+    });
+    const time = root.querySelector('[data-last-checked]');
+    time.removeAttribute('datetime');
+    time.textContent = '--:--:--';
   }
 
   function setup(root) {
@@ -72,12 +90,18 @@
       }
       refreshing = true;
       try {
-        const response = await fetch(config.apiUrl, { headers: { Accept: 'application/json' } });
+        const response = await fetch(config.apiUrl, { headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(10000) });
         if (!response.ok) throw new Error(`Status API ${response.status}`);
         const data = await response.json();
+        if (!Array.isArray(data.services) || data.services.length !== 2 ||
+            !['website', 'minecraft'].every((id) => data.services.some((service) => service?.id === id && typeof service.online === 'boolean')) ||
+            typeof data.checkedAt !== 'string' || !Number.isFinite(new Date(data.checkedAt).getTime())) {
+          throw new Error('Invalid Status API response');
+        }
         data.services.forEach((service) => updateCard(root, service));
         updateSummary(root, data);
       } catch (error) {
+        resetCards(root, '取得失敗');
         root.querySelector('[data-summary-dot]').className = 'nhv-status__summary-dot is-down';
         root.querySelector('[data-summary-title]').textContent = 'ステータスを取得できません';
         root.querySelector('[data-summary-copy]').textContent = 'しばらくしてから、もう一度お試しください。';
@@ -89,14 +113,24 @@
 
     root.querySelector('[data-status-refresh]').addEventListener('click', refresh);
     root.querySelector('[data-copy]').addEventListener('click', async (event) => {
-      await navigator.clipboard.writeText(event.currentTarget.dataset.copy);
       const toast = root.querySelector('[data-status-toast]');
+      const address = event.currentTarget.dataset.copy;
+      try {
+        await navigator.clipboard.writeText(address);
+        toast.textContent = 'アドレスをコピーしました';
+      } catch {
+        toast.textContent = `コピーできませんでした。接続先: ${address}`;
+      }
       toast.classList.add('is-visible');
       window.setTimeout(() => toast.classList.remove('is-visible'), 1800);
     });
 
     refresh();
-    window.setInterval(refresh, Number(config.refreshInterval) || 60000);
+    if (config.apiUrl) {
+      const interval = Math.max(10000, Number(config.refreshInterval) || 60000);
+      root.querySelector('.nhv-status__footer p').textContent = `表示は${interval / 1000}秒ごとに自動更新されます。`;
+      window.setInterval(refresh, interval);
+    }
   }
 
   document.querySelectorAll('[data-nehaverse-status]').forEach(setup);
